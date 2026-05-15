@@ -68,7 +68,7 @@ ul { list-style: none; }
 }
 
 .nav-logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.nav-logo img { height: 42px; width: auto; border-radius: 6px; }
+.nav-logo img { height: 58px; width: auto; border-radius: 6px; object-fit: contain; }
 .nav-logo-text .brand-name { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; color: #fff; line-height: 1.1; }
 .nav-logo-text .brand-tagline { font-size: 0.64rem; color: var(--red); letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
 
