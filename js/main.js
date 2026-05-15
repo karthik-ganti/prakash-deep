@@ -90,11 +90,9 @@ if (contactForm) {
 
     if (valid) {
       contactForm.reset();
+      showToast("Message sent! We'll be in touch shortly.");
       const success = document.getElementById('formSuccess');
-      if (success) {
-        success.classList.add('show');
-        setTimeout(() => success.classList.remove('show'), 5000);
-      }
+      if (success) success.classList.remove('show');
     }
   });
 
@@ -158,4 +156,83 @@ if (lightbox) {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
   });
+}
+
+// ─── SCROLL PROGRESS BAR ──────────────────────────────────────────────────────
+const scrollBar = document.getElementById('scrollProgress');
+if (scrollBar) {
+  window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    scrollBar.style.width = pct + '%';
+  }, { passive: true });
+}
+
+// ─── BACK TO TOP ──────────────────────────────────────────────────────────────
+const btt = document.getElementById('backToTop');
+if (btt) {
+  window.addEventListener('scroll', () => {
+    btt.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+// ─── ANIMATED STAT COUNTERS ───────────────────────────────────────────────────
+document.querySelectorAll('.stat-number').forEach(el => {
+  const target = parseInt(el.textContent);
+  if (isNaN(target)) return;
+  const suffix = el.textContent.replace(/[0-9]/g, '');
+  let started = false;
+  const cObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !started) {
+      started = true;
+      let count = 0;
+      const step = Math.ceil(target / 60);
+      const interval = setInterval(() => {
+        count = Math.min(count + step, target);
+        el.textContent = count + suffix;
+        if (count >= target) clearInterval(interval);
+      }, 16);
+    }
+  });
+  cObs.observe(el);
+});
+
+// ─── FAQ ACCORDION ────────────────────────────────────────────────────────────
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ─── TOAST NOTIFICATION ───────────────────────────────────────────────────────
+function showToast(msg, color = '#16a34a') {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.style.background = color;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ─── TRANSPARENT NAVBAR (home page only) ──────────────────────────────────────
+if (document.body.classList.contains('home-page')) {
+  const nav = document.querySelector('.navbar');
+  const onNavScroll = () => nav.classList.toggle('scrolled', window.scrollY > 60);
+  window.addEventListener('scroll', onNavScroll, { passive: true });
+  onNavScroll();
+}
+
+// ─── STATS BAR SLIDE-UP ───────────────────────────────────────────────────────
+const statsBar = document.querySelector('.stats-bar');
+if (statsBar) {
+  const sObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      statsBar.classList.add('in-view');
+      sObs.disconnect();
+    }
+  }, { threshold: 0.1 });
+  sObs.observe(statsBar);
 }
