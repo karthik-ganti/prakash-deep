@@ -257,7 +257,7 @@ ul { list-style: none; }
 /* ── SECTIONS ──────────────────────────── */
 .section { padding: 92px 0; }
 .section-gray { background: var(--gray-50); }
-.section-dark { background: var(--dark); }
+.section-dark, .section-navy { background: var(--dark); }
 
 /* ── SERVICE CARDS ─────────────────────── */
 .services-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 24px; }
